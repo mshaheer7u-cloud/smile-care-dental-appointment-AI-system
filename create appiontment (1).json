@@ -1,0 +1,173 @@
+{
+  "name": "create appiontment",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "create-appointment",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -288,
+        -16
+      ],
+      "id": "ce5c3702-f41f-4993-8632-ba22dd1a6f2c",
+      "name": "Webhook",
+      "webhookId": "89e9a9b8-a400-4a04-9bb0-2ed816c5d6db"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://aanfvjptvtawcazaaadg.supabase.co/rest/v1/appointments",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "sb_publishable_upiYhHctIZGuMQzqdW0l0A_ASdf5v3O"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer sb_publishable_upiYhHctIZGuMQzqdW0l0A_ASdf5v3O"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"name\": \"{{$json['Customer Name']}}\",\n\"email\": \"{{$json['Email Address']}}\",\n\"phone\": \"{{$json['Phone Number']}}\",\n\"appointment_date\": \"{{$json['Booking Date']}}\",\n\"appointment_time\": \"{{$json['Booking Time']}}\",\n\"price\": {{$json['Price']}}\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        240,
+        -16
+      ],
+      "id": "c2339ebd-cd61-4953-b4d8-59db9a86e41e",
+      "name": "Create Appointment",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        448,
+        -16
+      ],
+      "id": "c88cd582-2922-49da-b30e-b315a1d49525",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "const parsed = JSON.parse($json.body);\n\nreturn [\n  {\n    json: parsed\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -16
+      ],
+      "id": "1e2f6fc0-d761-410a-90d9-cc83b3fd150d",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": true
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.faridaqaisar.site",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+            "content-length": "263",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "en-US,en;q=0.9",
+            "content-type": "text/plain;charset=UTF-8",
+            "origin": "https://622ed2c3-9db8-4d2b-aa51-7c9c040051b5.lovableproject.com",
+            "priority": "u=1, i",
+            "referer": "https://622ed2c3-9db8-4d2b-aa51-7c9c040051b5.lovableproject.com/",
+            "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "no-cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "182.182.136.125",
+            "x-forwarded-host": "n8n.faridaqaisar.site",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "ff71e4ccd5c5",
+            "x-real-ip": "182.182.136.125"
+          },
+          "params": {},
+          "query": {},
+          "body": "{\"Customer Name\":\"Jia\",\"Email Address\":\"jiachoudary07@gmail.com\",\"Phone Number\":\"03045674539\",\"Service Type\":\"General Dentistry & Checkups\",\"Booking Date\":\"2026-03-17\",\"Booking Time\":\"2:00 PM\",\"Duration\":\"30 minutes\",\"Staff Member\":\"Dr. Michael Chen\",\"Price\":180}",
+          "webhookUrl": "https://n8n.faridaqaisar.site/webhook/create-appointment",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Appointment": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Create Appointment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fcb82940-b96c-4706-b549-cd641f49d8ed",
+  "meta": {
+    "instanceId": "5042a90c563d96f608c055878127823db4c0f0a359b706a2f776c8efa4137849"
+  },
+  "id": "zPLpNRQxaigIATrI",
+  "tags": []
+}
